@@ -7,16 +7,16 @@ using System.Web.UI.WebControls;
 
 namespace OpenGridWebDemo
 {
-    public partial class Articulos : System.Web.UI.Page
+    public partial class TiposDeArticulo : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
 
-        protected void OpenGridViewArticulos_InsertCommand(object sender, EventArgs e)
+        protected void OpenGridViewTiposDeArticulo_FilterCommand(object sender, OpenControls.OpenGridView.FilterCommandEventArgs e)
         {
-            ObjectDataSourceArticulos.Insert();
+            ObjectDataSourceTiposDeArticulo.FilterExpression = e.FilterExpression;
         }
     }
 }

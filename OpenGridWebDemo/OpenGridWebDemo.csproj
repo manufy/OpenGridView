@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=3.5.50401.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ajaxcontroltoolkit\AjaxControlToolkit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core">
@@ -64,17 +68,47 @@
       <DependentUpon>Articulos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Articulos.cs" />
+    <Compile Include="Default3.aspx.cs">
+      <DependentUpon>Default3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default3.aspx.designer.cs">
+      <DependentUpon>Default3.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FacturasDetalle.aspx.cs">
+      <DependentUpon>FacturasDetalle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FacturasDetalle.aspx.designer.cs">
+      <DependentUpon>FacturasDetalle.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FacturasDetalle.cs" />
     <Compile Include="DataSetTest.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataSetTest.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
+    <Compile Include="MasterDetailGrid.aspx.cs">
+      <DependentUpon>MasterDetailGrid.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
+    <Compile Include="MasterDetailGrid.aspx.designer.cs">
+      <DependentUpon>MasterDetailGrid.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterDetailView.aspx.cs">
+      <DependentUpon>MasterDetailView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterDetailView.aspx.designer.cs">
+      <DependentUpon>MasterDetailView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TiposDeArticulo.cs" />
+    <Compile Include="DefaultOK.aspx.cs">
+      <DependentUpon>DefaultOK.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DefaultOK.aspx.designer.cs">
+      <DependentUpon>DefaultOK.aspx</DependentUpon>
     </Compile>
     <Compile Include="Facturas.cs" />
     <Compile Include="OpenGridWebDemo.Master.cs">
@@ -85,6 +119,13 @@
       <DependentUpon>OpenGridWebDemo.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TiposDeArticulo.aspx.cs">
+      <DependentUpon>TiposDeArticulo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TiposDeArticulo.aspx.designer.cs">
+      <DependentUpon>TiposDeArticulo.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenGridView\OpenGridView.csproj">
@@ -104,12 +145,15 @@
     <None Include="DataSetTest.xss">
       <DependentUpon>DataSetTest.xsd</DependentUpon>
     </None>
-    <Content Include="ArrowDown.gif" />
-    <Content Include="ArrowUp.gif" />
     <Content Include="Articulos.aspx" />
-    <Content Include="Default.aspx" />
+    <Content Include="DefaultOK.aspx" />
     <Content Include="Default2.aspx" />
+    <Content Include="Default3.aspx" />
+    <Content Include="FacturasDetalle.aspx" />
+    <Content Include="MasterDetailGrid.aspx" />
+    <Content Include="MasterDetailView.aspx" />
     <Content Include="OpenGridWebDemo.Master" />
+    <Content Include="TiposDeArticulo.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

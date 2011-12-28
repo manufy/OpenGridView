@@ -11,7 +11,7 @@
 namespace OpenGridWebDemo {
     
     
-    public partial class Articulos {
+    public partial class TiposDeArticulo {
         
         /// <summary>
         /// Control ValidationSummaryInserciones.
@@ -59,21 +59,21 @@ namespace OpenGridWebDemo {
         protected global::System.Web.UI.WebControls.Label UpdateConflictMessage;
         
         /// <summary>
-        /// Control OpenGridViewArticulos.
+        /// Control OpenGridViewTiposDeArticulo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::OpenControls.OpenGridView OpenGridViewArticulos;
+        protected global::OpenControls.OpenGridView OpenGridViewTiposDeArticulo;
         
         /// <summary>
-        /// Control ObjectDataSourceArticulos.
+        /// Control ObjectDataSourceTiposDeArticulo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSourceArticulos;
+        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSourceTiposDeArticulo;
     }
 }

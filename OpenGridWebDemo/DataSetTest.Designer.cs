@@ -31,9 +31,13 @@ namespace OpenGridWebDemo {
         
         private ArticulosDataTable tableArticulos;
         
+        private TiposDeArticuloDataTable tableTiposDeArticulo;
+        
         private global::System.Data.DataRelation relationFK_FacturasDetalle_Facturas;
         
         private global::System.Data.DataRelation relationFK_FacturasDetalle_Articulos;
+        
+        private global::System.Data.DataRelation relationFK_Articulos_Articulos_Tipos;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
@@ -69,6 +73,9 @@ namespace OpenGridWebDemo {
                 }
                 if ((ds.Tables["Articulos"] != null)) {
                     base.Tables.Add(new ArticulosDataTable(ds.Tables["Articulos"]));
+                }
+                if ((ds.Tables["TiposDeArticulo"] != null)) {
+                    base.Tables.Add(new TiposDeArticuloDataTable(ds.Tables["TiposDeArticulo"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -112,6 +119,15 @@ namespace OpenGridWebDemo {
         public ArticulosDataTable Articulos {
             get {
                 return this.tableArticulos;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public TiposDeArticuloDataTable TiposDeArticulo {
+            get {
+                return this.tableTiposDeArticulo;
             }
         }
         
@@ -183,6 +199,9 @@ namespace OpenGridWebDemo {
                 if ((ds.Tables["Articulos"] != null)) {
                     base.Tables.Add(new ArticulosDataTable(ds.Tables["Articulos"]));
                 }
+                if ((ds.Tables["TiposDeArticulo"] != null)) {
+                    base.Tables.Add(new TiposDeArticuloDataTable(ds.Tables["TiposDeArticulo"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -231,8 +250,15 @@ namespace OpenGridWebDemo {
                     this.tableArticulos.InitVars();
                 }
             }
+            this.tableTiposDeArticulo = ((TiposDeArticuloDataTable)(base.Tables["TiposDeArticulo"]));
+            if ((initTable == true)) {
+                if ((this.tableTiposDeArticulo != null)) {
+                    this.tableTiposDeArticulo.InitVars();
+                }
+            }
             this.relationFK_FacturasDetalle_Facturas = this.Relations["FK_FacturasDetalle_Facturas"];
             this.relationFK_FacturasDetalle_Articulos = this.Relations["FK_FacturasDetalle_Articulos"];
+            this.relationFK_Articulos_Articulos_Tipos = this.Relations["FK_Articulos_Articulos_Tipos"];
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -248,6 +274,8 @@ namespace OpenGridWebDemo {
             base.Tables.Add(this.tableFacturasDetalle);
             this.tableArticulos = new ArticulosDataTable();
             base.Tables.Add(this.tableArticulos);
+            this.tableTiposDeArticulo = new TiposDeArticuloDataTable();
+            base.Tables.Add(this.tableTiposDeArticulo);
             this.relationFK_FacturasDetalle_Facturas = new global::System.Data.DataRelation("FK_FacturasDetalle_Facturas", new global::System.Data.DataColumn[] {
                         this.tableFacturas.idColumn}, new global::System.Data.DataColumn[] {
                         this.tableFacturasDetalle.articuloidColumn}, false);
@@ -256,6 +284,10 @@ namespace OpenGridWebDemo {
                         this.tableArticulos.idColumn}, new global::System.Data.DataColumn[] {
                         this.tableFacturasDetalle.articuloidColumn}, false);
             this.Relations.Add(this.relationFK_FacturasDetalle_Articulos);
+            this.relationFK_Articulos_Articulos_Tipos = new global::System.Data.DataRelation("FK_Articulos_Articulos_Tipos", new global::System.Data.DataColumn[] {
+                        this.tableTiposDeArticulo.idColumn}, new global::System.Data.DataColumn[] {
+                        this.tableArticulos.tipoarticuloidColumn}, false);
+            this.Relations.Add(this.relationFK_Articulos_Articulos_Tipos);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -270,6 +302,11 @@ namespace OpenGridWebDemo {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private bool ShouldSerializeArticulos() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private bool ShouldSerializeTiposDeArticulo() {
             return false;
         }
         
@@ -331,6 +368,8 @@ namespace OpenGridWebDemo {
         public delegate void FacturasDetalleRowChangeEventHandler(object sender, FacturasDetalleRowChangeEvent e);
         
         public delegate void ArticulosRowChangeEventHandler(object sender, ArticulosRowChangeEvent e);
+        
+        public delegate void TiposDeArticuloRowChangeEventHandler(object sender, TiposDeArticuloRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -612,6 +651,8 @@ namespace OpenGridWebDemo {
             
             private global::System.Data.DataColumn columncantidad;
             
+            private global::System.Data.DataColumn columnrow;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public FacturasDetalleDataTable() {
                 this.TableName = "FacturasDetalle";
@@ -671,6 +712,13 @@ namespace OpenGridWebDemo {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn rowColumn {
+                get {
+                    return this.columnrow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -699,13 +747,14 @@ namespace OpenGridWebDemo {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public FacturasDetalleRow AddFacturasDetalleRow(decimal facturaid, FacturasRow parentFacturasRowByFK_FacturasDetalle_Facturas, decimal cantidad) {
+            public FacturasDetalleRow AddFacturasDetalleRow(decimal facturaid, FacturasRow parentFacturasRowByFK_FacturasDetalle_Facturas, decimal cantidad, string row) {
                 FacturasDetalleRow rowFacturasDetalleRow = ((FacturasDetalleRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         facturaid,
                         null,
-                        cantidad};
+                        cantidad,
+                        row};
                 if ((parentFacturasRowByFK_FacturasDetalle_Facturas != null)) {
                     columnValuesArray[2] = parentFacturasRowByFK_FacturasDetalle_Facturas[0];
                 }
@@ -738,6 +787,7 @@ namespace OpenGridWebDemo {
                 this.columnfacturaid = base.Columns["facturaid"];
                 this.columnarticuloid = base.Columns["articuloid"];
                 this.columncantidad = base.Columns["cantidad"];
+                this.columnrow = base.Columns["row"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -750,6 +800,8 @@ namespace OpenGridWebDemo {
                 base.Columns.Add(this.columnarticuloid);
                 this.columncantidad = new global::System.Data.DataColumn("cantidad", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columncantidad);
+                this.columnrow = new global::System.Data.DataColumn("row", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnrow);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnid}, true));
                 this.columnid.AutoIncrement = true;
@@ -888,6 +940,10 @@ namespace OpenGridWebDemo {
             
             private global::System.Data.DataColumn columndescripcion;
             
+            private global::System.Data.DataColumn columntipoarticuloid;
+            
+            private global::System.Data.DataColumn columncampocalculadonovisible;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public ArticulosDataTable() {
                 this.TableName = "Articulos";
@@ -933,6 +989,20 @@ namespace OpenGridWebDemo {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn tipoarticuloidColumn {
+                get {
+                    return this.columntipoarticuloid;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn campocalculadonovisibleColumn {
+                get {
+                    return this.columncampocalculadonovisible;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -961,11 +1031,16 @@ namespace OpenGridWebDemo {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public ArticulosRow AddArticulosRow(string descripcion) {
+            public ArticulosRow AddArticulosRow(string descripcion, TiposDeArticuloRow parentTiposDeArticuloRowByFK_Articulos_Articulos_Tipos, int campocalculadonovisible) {
                 ArticulosRow rowArticulosRow = ((ArticulosRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
-                        descripcion};
+                        descripcion,
+                        null,
+                        campocalculadonovisible};
+                if ((parentTiposDeArticuloRowByFK_Articulos_Articulos_Tipos != null)) {
+                    columnValuesArray[2] = parentTiposDeArticuloRowByFK_Articulos_Articulos_Tipos[0];
+                }
                 rowArticulosRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowArticulosRow);
                 return rowArticulosRow;
@@ -993,6 +1068,8 @@ namespace OpenGridWebDemo {
             internal void InitVars() {
                 this.columnid = base.Columns["id"];
                 this.columndescripcion = base.Columns["descripcion"];
+                this.columntipoarticuloid = base.Columns["tipoarticuloid"];
+                this.columncampocalculadonovisible = base.Columns["campocalculadonovisible"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1001,6 +1078,10 @@ namespace OpenGridWebDemo {
                 base.Columns.Add(this.columnid);
                 this.columndescripcion = new global::System.Data.DataColumn("descripcion", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columndescripcion);
+                this.columntipoarticuloid = new global::System.Data.DataColumn("tipoarticuloid", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columntipoarticuloid);
+                this.columncampocalculadonovisible = new global::System.Data.DataColumn("campocalculadonovisible", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncampocalculadonovisible);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnid}, true));
                 this.columnid.AutoIncrement = true;
@@ -1011,6 +1092,7 @@ namespace OpenGridWebDemo {
                 this.columnid.Unique = true;
                 this.columnid.Caption = "articuloid";
                 this.columndescripcion.MaxLength = 50;
+                this.columntipoarticuloid.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1088,6 +1170,271 @@ namespace OpenGridWebDemo {
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
                 attribute2.FixedValue = "ArticulosDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class TiposDeArticuloDataTable : global::System.Data.TypedTableBase<TiposDeArticuloRow> {
+            
+            private global::System.Data.DataColumn columnid;
+            
+            private global::System.Data.DataColumn columndescripcion;
+            
+            private global::System.Data.DataColumn columnROW;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public TiposDeArticuloDataTable() {
+                this.TableName = "TiposDeArticulo";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal TiposDeArticuloDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected TiposDeArticuloDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn idColumn {
+                get {
+                    return this.columnid;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn descripcionColumn {
+                get {
+                    return this.columndescripcion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn ROWColumn {
+                get {
+                    return this.columnROW;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public TiposDeArticuloRow this[int index] {
+                get {
+                    return ((TiposDeArticuloRow)(this.Rows[index]));
+                }
+            }
+            
+            public event TiposDeArticuloRowChangeEventHandler TiposDeArticuloRowChanging;
+            
+            public event TiposDeArticuloRowChangeEventHandler TiposDeArticuloRowChanged;
+            
+            public event TiposDeArticuloRowChangeEventHandler TiposDeArticuloRowDeleting;
+            
+            public event TiposDeArticuloRowChangeEventHandler TiposDeArticuloRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void AddTiposDeArticuloRow(TiposDeArticuloRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public TiposDeArticuloRow AddTiposDeArticuloRow(string descripcion, string ROW) {
+                TiposDeArticuloRow rowTiposDeArticuloRow = ((TiposDeArticuloRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        null,
+                        descripcion,
+                        ROW};
+                rowTiposDeArticuloRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowTiposDeArticuloRow);
+                return rowTiposDeArticuloRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public TiposDeArticuloRow FindByid(decimal id) {
+                return ((TiposDeArticuloRow)(this.Rows.Find(new object[] {
+                            id})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public override global::System.Data.DataTable Clone() {
+                TiposDeArticuloDataTable cln = ((TiposDeArticuloDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new TiposDeArticuloDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal void InitVars() {
+                this.columnid = base.Columns["id"];
+                this.columndescripcion = base.Columns["descripcion"];
+                this.columnROW = base.Columns["ROW"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            private void InitClass() {
+                this.columnid = new global::System.Data.DataColumn("id", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnid);
+                this.columndescripcion = new global::System.Data.DataColumn("descripcion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columndescripcion);
+                this.columnROW = new global::System.Data.DataColumn("ROW", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnROW);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnid}, true));
+                this.columnid.AutoIncrement = true;
+                this.columnid.AutoIncrementSeed = -1;
+                this.columnid.AutoIncrementStep = -1;
+                this.columnid.AllowDBNull = false;
+                this.columnid.ReadOnly = true;
+                this.columnid.Unique = true;
+                this.columnid.Caption = "tipoarticuloid";
+                this.columndescripcion.MaxLength = 50;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public TiposDeArticuloRow NewTiposDeArticuloRow() {
+                return ((TiposDeArticuloRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new TiposDeArticuloRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override global::System.Type GetRowType() {
+                return typeof(TiposDeArticuloRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.TiposDeArticuloRowChanged != null)) {
+                    this.TiposDeArticuloRowChanged(this, new TiposDeArticuloRowChangeEvent(((TiposDeArticuloRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.TiposDeArticuloRowChanging != null)) {
+                    this.TiposDeArticuloRowChanging(this, new TiposDeArticuloRowChangeEvent(((TiposDeArticuloRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.TiposDeArticuloRowDeleted != null)) {
+                    this.TiposDeArticuloRowDeleted(this, new TiposDeArticuloRowChangeEvent(((TiposDeArticuloRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.TiposDeArticuloRowDeleting != null)) {
+                    this.TiposDeArticuloRowDeleting(this, new TiposDeArticuloRowChangeEvent(((TiposDeArticuloRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void RemoveTiposDeArticuloRow(TiposDeArticuloRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                DataSetTest ds = new DataSetTest();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "TiposDeArticuloDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -1283,6 +1630,21 @@ namespace OpenGridWebDemo {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string row {
+                get {
+                    try {
+                        return ((string)(this[this.tableFacturasDetalle.rowColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'row\' de la tabla \'FacturasDetalle\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableFacturasDetalle.rowColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public FacturasRow FacturasRow {
                 get {
                     return ((FacturasRow)(this.GetParentRow(this.Table.ParentRelations["FK_FacturasDetalle_Facturas"])));
@@ -1331,6 +1693,16 @@ namespace OpenGridWebDemo {
             public void SetcantidadNull() {
                 this[this.tableFacturasDetalle.cantidadColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsrowNull() {
+                return this.IsNull(this.tableFacturasDetalle.rowColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetrowNull() {
+                this[this.tableFacturasDetalle.rowColumn] = global::System.Convert.DBNull;
+            }
         }
         
         /// <summary>
@@ -1373,6 +1745,42 @@ namespace OpenGridWebDemo {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public decimal tipoarticuloid {
+                get {
+                    return ((decimal)(this[this.tableArticulos.tipoarticuloidColumn]));
+                }
+                set {
+                    this[this.tableArticulos.tipoarticuloidColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int campocalculadonovisible {
+                get {
+                    try {
+                        return ((int)(this[this.tableArticulos.campocalculadonovisibleColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'campocalculadonovisible\' de la tabla \'Articulos\' es DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulos.campocalculadonovisibleColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public TiposDeArticuloRow TiposDeArticuloRow {
+                get {
+                    return ((TiposDeArticuloRow)(this.GetParentRow(this.Table.ParentRelations["FK_Articulos_Articulos_Tipos"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Articulos_Articulos_Tipos"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public bool IsdescripcionNull() {
                 return this.IsNull(this.tableArticulos.descripcionColumn);
             }
@@ -1383,12 +1791,107 @@ namespace OpenGridWebDemo {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IscampocalculadonovisibleNull() {
+                return this.IsNull(this.tableArticulos.campocalculadonovisibleColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetcampocalculadonovisibleNull() {
+                this[this.tableArticulos.campocalculadonovisibleColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public FacturasDetalleRow[] GetFacturasDetalleRows() {
                 if ((this.Table.ChildRelations["FK_FacturasDetalle_Articulos"] == null)) {
                     return new FacturasDetalleRow[0];
                 }
                 else {
                     return ((FacturasDetalleRow[])(base.GetChildRows(this.Table.ChildRelations["FK_FacturasDetalle_Articulos"])));
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public partial class TiposDeArticuloRow : global::System.Data.DataRow {
+            
+            private TiposDeArticuloDataTable tableTiposDeArticulo;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal TiposDeArticuloRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableTiposDeArticulo = ((TiposDeArticuloDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public decimal id {
+                get {
+                    return ((decimal)(this[this.tableTiposDeArticulo.idColumn]));
+                }
+                set {
+                    this[this.tableTiposDeArticulo.idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string descripcion {
+                get {
+                    try {
+                        return ((string)(this[this.tableTiposDeArticulo.descripcionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'descripcion\' de la tabla \'TiposDeArticulo\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTiposDeArticulo.descripcionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string ROW {
+                get {
+                    try {
+                        return ((string)(this[this.tableTiposDeArticulo.ROWColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'ROW\' de la tabla \'TiposDeArticulo\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTiposDeArticulo.ROWColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsdescripcionNull() {
+                return this.IsNull(this.tableTiposDeArticulo.descripcionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetdescripcionNull() {
+                this[this.tableTiposDeArticulo.descripcionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsROWNull() {
+                return this.IsNull(this.tableTiposDeArticulo.ROWColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetROWNull() {
+                this[this.tableTiposDeArticulo.ROWColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public ArticulosRow[] GetArticulosRows() {
+                if ((this.Table.ChildRelations["FK_Articulos_Articulos_Tipos"] == null)) {
+                    return new ArticulosRow[0];
+                }
+                else {
+                    return ((ArticulosRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Articulos_Articulos_Tipos"])));
                 }
             }
         }
@@ -1473,6 +1976,37 @@ namespace OpenGridWebDemo {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public ArticulosRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public class TiposDeArticuloRowChangeEvent : global::System.EventArgs {
+            
+            private TiposDeArticuloRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public TiposDeArticuloRowChangeEvent(TiposDeArticuloRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public TiposDeArticuloRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -2082,7 +2616,7 @@ SELECT facturadetalleid, facturaid, articuloid, cantidad FROM FacturasDetalle WH
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[6];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT facturadetalleid, facturaid, articuloid, cantidad FROM dbo.FacturasDetalle" +
@@ -2090,15 +2624,34 @@ SELECT facturadetalleid, facturaid, articuloid, cantidad FROM FacturasDetalle WH
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT        facturadetalleid, facturaid, articuloid, cantidad\r\nFROM            " +
-                "FacturasDetalle\r\nWHERE        (facturadetalleid = facturadetalleid)";
+            this._commandCollection[1].CommandText = "SELECT articuloid, cantidad, facturadetalleid, facturaid FROM FacturasDetalle WHE" +
+                "RE (facturadetalleid = facturadetalleid)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "SELECT        facturadetalleid, facturaid, articuloid, cantidad\r\nFROM            " +
-                "FacturasDetalle\r\nWHERE        (facturaid = @facturaid)";
+            this._commandCollection[2].CommandText = "SELECT articuloid, cantidad, facturadetalleid, facturaid FROM FacturasDetalle WHE" +
+                "RE (facturaid = @facturaid)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@facturaid", global::System.Data.SqlDbType.Decimal, 9, global::System.Data.ParameterDirection.Input, 18, 0, "facturaid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "dbo.GetFacturasDetallePaged";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.StoredProcedure;
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RowIndex", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@MaxRows", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[4].Connection = this.Connection;
+            this._commandCollection[4].CommandText = "dbo.GetFacturasDetallePagedSorted";
+            this._commandCollection[4].CommandType = global::System.Data.CommandType.StoredProcedure;
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RowIndex", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@MaxRows", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@sortExpression", global::System.Data.SqlDbType.NVarChar, 4000, global::System.Data.ParameterDirection.Input, 0, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[5] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[5].Connection = this.Connection;
+            this._commandCollection[5].CommandText = "SELECT COUNT(*) FROM FacturasDetalle";
+            this._commandCollection[5].CommandType = global::System.Data.CommandType.Text;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2173,6 +2726,56 @@ SELECT facturadetalleid, facturaid, articuloid, cantidad FROM FacturasDetalle WH
             }
             else {
                 this.Adapter.SelectCommand.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            DataSetTest.FacturasDetalleDataTable dataTable = new DataSetTest.FacturasDetalleDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual DataSetTest.FacturasDetalleDataTable GetDataPaged(global::System.Nullable<int> RowIndex, global::System.Nullable<int> MaxRows) {
+            this.Adapter.SelectCommand = this.CommandCollection[3];
+            if ((RowIndex.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(RowIndex.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((MaxRows.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[2].Value = ((int)(MaxRows.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            DataSetTest.FacturasDetalleDataTable dataTable = new DataSetTest.FacturasDetalleDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual DataSetTest.FacturasDetalleDataTable GetDataPagedSorted(global::System.Nullable<int> RowIndex, global::System.Nullable<int> MaxRows, string sortExpression) {
+            this.Adapter.SelectCommand = this.CommandCollection[4];
+            if ((RowIndex.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(RowIndex.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((MaxRows.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[2].Value = ((int)(MaxRows.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            if ((sortExpression == null)) {
+                this.Adapter.SelectCommand.Parameters[3].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[3].Value = ((string)(sortExpression));
             }
             DataSetTest.FacturasDetalleDataTable dataTable = new DataSetTest.FacturasDetalleDataTable();
             this.Adapter.Fill(dataTable);
@@ -2350,6 +2953,33 @@ SELECT facturadetalleid, facturaid, articuloid, cantidad FROM FacturasDetalle WH
                 }
             }
         }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual global::System.Nullable<int> GetRowCount() {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[5];
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            object returnValue;
+            try {
+                returnValue = command.ExecuteScalar();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            if (((returnValue == null) 
+                        || (returnValue.GetType() == typeof(global::System.DBNull)))) {
+                return new global::System.Nullable<int>();
+            }
+            else {
+                return new global::System.Nullable<int>(((int)(returnValue)));
+            }
+        }
     }
     
     /// <summary>
@@ -2469,31 +3099,41 @@ SELECT facturadetalleid, facturaid, articuloid, cantidad FROM FacturasDetalle WH
             tableMapping.DataSetTable = "Articulos";
             tableMapping.ColumnMappings.Add("articuloid", "id");
             tableMapping.ColumnMappings.Add("descripcion", "descripcion");
+            tableMapping.ColumnMappings.Add("tipoarticuloid", "tipoarticuloid");
+            tableMapping.ColumnMappings.Add("campocalculadonovisible", "campocalculadonovisible");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[Articulos] WHERE (([articuloid] = @Original_articuloid) AND ((" +
-                "@IsNull_descripcion = 1 AND [descripcion] IS NULL) OR ([descripcion] = @Original" +
-                "_descripcion)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [Articulos] WHERE (([articuloid] = @Original_articuloid) AND ((@IsNull_descripcion = 1 AND [descripcion] IS NULL) OR ([descripcion] = @Original_descripcion)) AND ([tipoarticuloid] = @Original_tipoarticuloid) AND ((@IsNull_campocalculadonovisible = 1 AND [campocalculadonovisible] IS NULL) OR ([campocalculadonovisible] = @Original_campocalculadonovisible)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_articuloid", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 0, "articuloid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_descripcion", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_descripcion", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_tipoarticuloid", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 0, "tipoarticuloid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_campocalculadonovisible", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "campocalculadonovisible", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_campocalculadonovisible", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "campocalculadonovisible", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Articulos] ([descripcion]) VALUES (@descripcion);\r\nSELECT arti" +
-                "culoid, descripcion FROM Articulos WHERE (articuloid = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [Articulos] ([descripcion], [tipoarticuloid], [campocalculadonovisible]) VALUES (@descripcion, @tipoarticuloid, @campocalculadonovisible);
+SELECT articuloid, descripcion, tipoarticuloid, campocalculadonovisible FROM Articulos WHERE (articuloid = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@descripcion", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@tipoarticuloid", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 0, "tipoarticuloid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@campocalculadonovisible", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "campocalculadonovisible", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[Articulos] SET [descripcion] = @descripcion WHERE (([articuloid] = @Original_articuloid) AND ((@IsNull_descripcion = 1 AND [descripcion] IS NULL) OR ([descripcion] = @Original_descripcion)));
-SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Articulos] SET [descripcion] = @descripcion, [tipoarticuloid] = @tipoarticuloid, [campocalculadonovisible] = @campocalculadonovisible WHERE (([articuloid] = @Original_articuloid) AND ((@IsNull_descripcion = 1 AND [descripcion] IS NULL) OR ([descripcion] = @Original_descripcion)) AND ([tipoarticuloid] = @Original_tipoarticuloid) AND ((@IsNull_campocalculadonovisible = 1 AND [campocalculadonovisible] IS NULL) OR ([campocalculadonovisible] = @Original_campocalculadonovisible)));
+SELECT articuloid, descripcion, tipoarticuloid, campocalculadonovisible FROM Articulos WHERE (articuloid = @articuloid)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@descripcion", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@tipoarticuloid", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 0, "tipoarticuloid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@campocalculadonovisible", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "campocalculadonovisible", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_articuloid", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 0, "articuloid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_descripcion", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_descripcion", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_tipoarticuloid", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 0, "tipoarticuloid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_campocalculadonovisible", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "campocalculadonovisible", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_campocalculadonovisible", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "campocalculadonovisible", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@articuloid", global::System.Data.SqlDbType.Decimal, 9, global::System.Data.ParameterDirection.Input, 18, 0, "articuloid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
@@ -2508,12 +3148,13 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[5];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT articuloid, descripcion FROM dbo.Articulos";
+            this._commandCollection[0].CommandText = "SELECT        articuloid, descripcion, tipoarticuloid, campocalculadonovisible\r\nF" +
+                "ROM            Articulos";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT        articuloid, descripcion\r\nFROM            Articulos\r\nWHERE        (a" +
-                "rticuloid = @articuloid)";
+            this._commandCollection[1].CommandText = "SELECT articuloid, campocalculadonovisible, descripcion, tipoarticuloid FROM Arti" +
+                "culos WHERE (articuloid = @articuloid)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@articuloid", global::System.Data.SqlDbType.Decimal, 9, global::System.Data.ParameterDirection.Input, 18, 0, "articuloid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
@@ -2661,8 +3302,466 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(decimal Original_articuloid, string Original_descripcion) {
+        public virtual int Delete(decimal Original_articuloid, string Original_descripcion, decimal Original_tipoarticuloid, global::System.Nullable<int> Original_campocalculadonovisible) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((decimal)(Original_articuloid));
+            if ((Original_descripcion == null)) {
+                this.Adapter.DeleteCommand.Parameters[1].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[1].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[2].Value = ((string)(Original_descripcion));
+            }
+            this.Adapter.DeleteCommand.Parameters[3].Value = ((decimal)(Original_tipoarticuloid));
+            if ((Original_campocalculadonovisible.HasValue == true)) {
+                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[5].Value = ((int)(Original_campocalculadonovisible.Value));
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
+            if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.DeleteCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.DeleteCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.DeleteCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
+        public virtual int Insert(string descripcion, decimal tipoarticuloid, global::System.Nullable<int> campocalculadonovisible) {
+            if ((descripcion == null)) {
+                this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[0].Value = ((string)(descripcion));
+            }
+            this.Adapter.InsertCommand.Parameters[1].Value = ((decimal)(tipoarticuloid));
+            if ((campocalculadonovisible.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[2].Value = ((int)(campocalculadonovisible.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
+            if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.InsertCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.InsertCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.InsertCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
+        public virtual int Update(string descripcion, decimal tipoarticuloid, global::System.Nullable<int> campocalculadonovisible, decimal Original_articuloid, string Original_descripcion, decimal Original_tipoarticuloid, global::System.Nullable<int> Original_campocalculadonovisible, decimal articuloid) {
+            if ((descripcion == null)) {
+                this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(descripcion));
+            }
+            this.Adapter.UpdateCommand.Parameters[1].Value = ((decimal)(tipoarticuloid));
+            if ((campocalculadonovisible.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((int)(campocalculadonovisible.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((decimal)(Original_articuloid));
+            if ((Original_descripcion == null)) {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Original_descripcion));
+            }
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((decimal)(Original_tipoarticuloid));
+            if ((Original_campocalculadonovisible.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((int)(Original_campocalculadonovisible.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[8].Value = global::System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((decimal)(articuloid));
+            global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
+            if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                this.Adapter.UpdateCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.UpdateCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    this.Adapter.UpdateCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual global::System.Nullable<int> GetRowCount() {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[4];
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            object returnValue;
+            try {
+                returnValue = command.ExecuteScalar();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            if (((returnValue == null) 
+                        || (returnValue.GetType() == typeof(global::System.DBNull)))) {
+                return new global::System.Nullable<int>();
+            }
+            else {
+                return new global::System.Nullable<int>(((int)(returnValue)));
+            }
+        }
+    }
+    
+    /// <summary>
+    ///Represents the connection and commands used to retrieve and save data.
+    ///</summary>
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+    [global::System.ComponentModel.DesignerCategoryAttribute("code")]
+    [global::System.ComponentModel.ToolboxItem(true)]
+    [global::System.ComponentModel.DataObjectAttribute(true)]
+    [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class TiposDeArticuloTableAdapter : global::System.ComponentModel.Component {
+        
+        private global::System.Data.SqlClient.SqlDataAdapter _adapter;
+        
+        private global::System.Data.SqlClient.SqlConnection _connection;
+        
+        private global::System.Data.SqlClient.SqlTransaction _transaction;
+        
+        private global::System.Data.SqlClient.SqlCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public TiposDeArticuloTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        protected internal global::System.Data.SqlClient.SqlDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        internal global::System.Data.SqlClient.SqlConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        internal global::System.Data.SqlClient.SqlTransaction Transaction {
+            get {
+                return this._transaction;
+            }
+            set {
+                this._transaction = value;
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    this.CommandCollection[i].Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.DeleteCommand != null))) {
+                    this.Adapter.DeleteCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.InsertCommand != null))) {
+                    this.Adapter.InsertCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.UpdateCommand != null))) {
+                    this.Adapter.UpdateCommand.Transaction = this._transaction;
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        protected global::System.Data.SqlClient.SqlCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitAdapter() {
+            this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
+            global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "TiposDeArticulo";
+            tableMapping.ColumnMappings.Add("tipoarticuloid", "id");
+            tableMapping.ColumnMappings.Add("descripcion", "descripcion");
+            this._adapter.TableMappings.Add(tableMapping);
+            this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.DeleteCommand.Connection = this.Connection;
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[ArticulosTipos] WHERE (([tipoarticuloid] = @Original_tipoartic" +
+                "uloid) AND ((@IsNull_descripcion = 1 AND [descripcion] IS NULL) OR ([descripcion" +
+                "] = @Original_descripcion)))";
+            this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_tipoarticuloid", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 0, "tipoarticuloid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_descripcion", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_descripcion", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.InsertCommand.Connection = this.Connection;
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[ArticulosTipos] ([descripcion]) VALUES (@descripcion);\r\nSELECT" +
+                " tipoarticuloid, descripcion FROM ArticulosTipos WHERE (tipoarticuloid = SCOPE_I" +
+                "DENTITY())";
+            this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@descripcion", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
+            this._adapter.UpdateCommand.Connection = this.Connection;
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[ArticulosTipos] SET [descripcion] = @descripcion WHERE (([tipoarticuloid] = @Original_tipoarticuloid) AND ((@IsNull_descripcion = 1 AND [descripcion] IS NULL) OR ([descripcion] = @Original_descripcion)));
+SELECT tipoarticuloid, descripcion FROM ArticulosTipos WHERE (tipoarticuloid = @tipoarticuloid)";
+            this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@descripcion", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_tipoarticuloid", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 18, 0, "tipoarticuloid", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_descripcion", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_descripcion", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "descripcion", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@tipoarticuloid", global::System.Data.SqlDbType.Decimal, 9, global::System.Data.ParameterDirection.Input, 18, 0, "tipoarticuloid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitConnection() {
+            this._connection = new global::System.Data.SqlClient.SqlConnection();
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TestConnectionString"].ConnectionString;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitCommandCollection() {
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[5];
+            this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = "SELECT tipoarticuloid, descripcion FROM ArticulosTipos";
+            this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT        tipoarticuloid, descripcion\r\nFROM            ArticulosTipos\r\nWHERE " +
+                "       (tipoarticuloid = @tipoarticuloid)";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@tipoarticuloid", global::System.Data.SqlDbType.Decimal, 9, global::System.Data.ParameterDirection.Input, 18, 0, "tipoarticuloid", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "dbo.GetTiposDeArticuloPaged";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.StoredProcedure;
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RowIndex", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@MaxRows", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "dbo.GetTiposDeArticuloPagedSorted";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.StoredProcedure;
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RowIndex", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@MaxRows", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@sortExpression", global::System.Data.SqlDbType.NVarChar, 4000, global::System.Data.ParameterDirection.Input, 0, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[4].Connection = this.Connection;
+            this._commandCollection[4].CommandText = "SELECT COUNT(*) FROM ArticulosTipos";
+            this._commandCollection[4].CommandType = global::System.Data.CommandType.Text;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
+        public virtual int Fill(DataSetTest.TiposDeArticuloDataTable dataTable) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual DataSetTest.TiposDeArticuloDataTable GetData() {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            DataSetTest.TiposDeArticuloDataTable dataTable = new DataSetTest.TiposDeArticuloDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
+        public virtual int FillByTipoArticuloID(DataSetTest.TiposDeArticuloDataTable dataTable, decimal tipoarticuloid) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((decimal)(tipoarticuloid));
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual DataSetTest.TiposDeArticuloDataTable GetDataByTipoArticuloID(decimal tipoarticuloid) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((decimal)(tipoarticuloid));
+            DataSetTest.TiposDeArticuloDataTable dataTable = new DataSetTest.TiposDeArticuloDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual DataSetTest.TiposDeArticuloDataTable GetDataPaged(global::System.Nullable<int> RowIndex, global::System.Nullable<int> MaxRows) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
+            if ((RowIndex.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(RowIndex.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((MaxRows.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[2].Value = ((int)(MaxRows.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            DataSetTest.TiposDeArticuloDataTable dataTable = new DataSetTest.TiposDeArticuloDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual DataSetTest.TiposDeArticuloDataTable GetDataPagedSorted(global::System.Nullable<int> RowIndex, global::System.Nullable<int> MaxRows, string sortExpression) {
+            this.Adapter.SelectCommand = this.CommandCollection[3];
+            if ((RowIndex.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(RowIndex.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((MaxRows.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[2].Value = ((int)(MaxRows.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[2].Value = global::System.DBNull.Value;
+            }
+            if ((sortExpression == null)) {
+                this.Adapter.SelectCommand.Parameters[3].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[3].Value = ((string)(sortExpression));
+            }
+            DataSetTest.TiposDeArticuloDataTable dataTable = new DataSetTest.TiposDeArticuloDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(DataSetTest.TiposDeArticuloDataTable dataTable) {
+            return this.Adapter.Update(dataTable);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(DataSetTest dataSet) {
+            return this.Adapter.Update(dataSet, "TiposDeArticulo");
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(global::System.Data.DataRow dataRow) {
+            return this.Adapter.Update(new global::System.Data.DataRow[] {
+                        dataRow});
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(global::System.Data.DataRow[] dataRows) {
+            return this.Adapter.Update(dataRows);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
+        public virtual int Delete(decimal Original_tipoarticuloid, string Original_descripcion) {
+            this.Adapter.DeleteCommand.Parameters[0].Value = ((decimal)(Original_tipoarticuloid));
             if ((Original_descripcion == null)) {
                 this.Adapter.DeleteCommand.Parameters[1].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[2].Value = global::System.DBNull.Value;
@@ -2716,14 +3815,14 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string descripcion, decimal Original_articuloid, string Original_descripcion, decimal articuloid) {
+        public virtual int Update(string descripcion, decimal Original_tipoarticuloid, string Original_descripcion, decimal tipoarticuloid) {
             if ((descripcion == null)) {
                 this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(descripcion));
             }
-            this.Adapter.UpdateCommand.Parameters[1].Value = ((decimal)(Original_articuloid));
+            this.Adapter.UpdateCommand.Parameters[1].Value = ((decimal)(Original_tipoarticuloid));
             if ((Original_descripcion == null)) {
                 this.Adapter.UpdateCommand.Parameters[2].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
@@ -2732,7 +3831,7 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
                 this.Adapter.UpdateCommand.Parameters[2].Value = ((object)(0));
                 this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Original_descripcion));
             }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((decimal)(articuloid));
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((decimal)(tipoarticuloid));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -2796,6 +3895,8 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
         
         private ArticulosTableAdapter _articulosTableAdapter;
         
+        private TiposDeArticuloTableAdapter _tiposDeArticuloTableAdapter;
+        
         private bool _backupDataSetBeforeUpdate;
         
         private global::System.Data.IDbConnection _connection;
@@ -2850,6 +3951,19 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.EditorAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterManagerPropertyEditor, Microso" +
+            "ft.VSDesigner, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" +
+            "", "System.Drawing.Design.UITypeEditor")]
+        public TiposDeArticuloTableAdapter TiposDeArticuloTableAdapter {
+            get {
+                return this._tiposDeArticuloTableAdapter;
+            }
+            set {
+                this._tiposDeArticuloTableAdapter = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public bool BackupDataSetBeforeUpdate {
             get {
                 return this._backupDataSetBeforeUpdate;
@@ -2878,6 +3992,10 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
                             && (this._articulosTableAdapter.Connection != null))) {
                     return this._articulosTableAdapter.Connection;
                 }
+                if (((this._tiposDeArticuloTableAdapter != null) 
+                            && (this._tiposDeArticuloTableAdapter.Connection != null))) {
+                    return this._tiposDeArticuloTableAdapter.Connection;
+                }
                 return null;
             }
             set {
@@ -2899,6 +4017,9 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
                 if ((this._articulosTableAdapter != null)) {
                     count = (count + 1);
                 }
+                if ((this._tiposDeArticuloTableAdapter != null)) {
+                    count = (count + 1);
+                }
                 return count;
             }
         }
@@ -2909,6 +4030,15 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private int UpdateUpdatedRows(DataSetTest dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
+            if ((this._tiposDeArticuloTableAdapter != null)) {
+                global::System.Data.DataRow[] updatedRows = dataSet.TiposDeArticulo.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
+                updatedRows = this.GetRealUpdatedRows(updatedRows, allAddedRows);
+                if (((updatedRows != null) 
+                            && (0 < updatedRows.Length))) {
+                    result = (result + this._tiposDeArticuloTableAdapter.Update(updatedRows));
+                    allChangedRows.AddRange(updatedRows);
+                }
+            }
             if ((this._articulosTableAdapter != null)) {
                 global::System.Data.DataRow[] updatedRows = dataSet.Articulos.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
                 updatedRows = this.GetRealUpdatedRows(updatedRows, allAddedRows);
@@ -2945,6 +4075,14 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private int UpdateInsertedRows(DataSetTest dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
+            if ((this._tiposDeArticuloTableAdapter != null)) {
+                global::System.Data.DataRow[] addedRows = dataSet.TiposDeArticulo.Select(null, null, global::System.Data.DataViewRowState.Added);
+                if (((addedRows != null) 
+                            && (0 < addedRows.Length))) {
+                    result = (result + this._tiposDeArticuloTableAdapter.Update(addedRows));
+                    allAddedRows.AddRange(addedRows);
+                }
+            }
             if ((this._articulosTableAdapter != null)) {
                 global::System.Data.DataRow[] addedRows = dataSet.Articulos.Select(null, null, global::System.Data.DataViewRowState.Added);
                 if (((addedRows != null) 
@@ -3002,6 +4140,14 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
                     allChangedRows.AddRange(deletedRows);
                 }
             }
+            if ((this._tiposDeArticuloTableAdapter != null)) {
+                global::System.Data.DataRow[] deletedRows = dataSet.TiposDeArticulo.Select(null, null, global::System.Data.DataViewRowState.Deleted);
+                if (((deletedRows != null) 
+                            && (0 < deletedRows.Length))) {
+                    result = (result + this._tiposDeArticuloTableAdapter.Update(deletedRows));
+                    allChangedRows.AddRange(deletedRows);
+                }
+            }
             return result;
         }
         
@@ -3051,6 +4197,11 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
             }
             if (((this._articulosTableAdapter != null) 
                         && (this.MatchTableAdapterConnection(this._articulosTableAdapter.Connection) == false))) {
+                throw new global::System.ArgumentException("Todos los TableAdapters administrados por un TableAdapterManager deben usar la mi" +
+                        "sma cadena de conexión.");
+            }
+            if (((this._tiposDeArticuloTableAdapter != null) 
+                        && (this.MatchTableAdapterConnection(this._tiposDeArticuloTableAdapter.Connection) == false))) {
                 throw new global::System.ArgumentException("Todos los TableAdapters administrados por un TableAdapterManager deben usar la mi" +
                         "sma cadena de conexión.");
             }
@@ -3111,6 +4262,15 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
                     if (this._articulosTableAdapter.Adapter.AcceptChangesDuringUpdate) {
                         this._articulosTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
                         adaptersWithAcceptChangesDuringUpdate.Add(this._articulosTableAdapter.Adapter);
+                    }
+                }
+                if ((this._tiposDeArticuloTableAdapter != null)) {
+                    revertConnections.Add(this._tiposDeArticuloTableAdapter, this._tiposDeArticuloTableAdapter.Connection);
+                    this._tiposDeArticuloTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(workConnection));
+                    this._tiposDeArticuloTableAdapter.Transaction = ((global::System.Data.SqlClient.SqlTransaction)(workTransaction));
+                    if (this._tiposDeArticuloTableAdapter.Adapter.AcceptChangesDuringUpdate) {
+                        this._tiposDeArticuloTableAdapter.Adapter.AcceptChangesDuringUpdate = false;
+                        adaptersWithAcceptChangesDuringUpdate.Add(this._tiposDeArticuloTableAdapter.Adapter);
                     }
                 }
                 // 
@@ -3182,6 +4342,10 @@ SELECT articuloid, descripcion FROM Articulos WHERE (articuloid = @articuloid)";
                 if ((this._articulosTableAdapter != null)) {
                     this._articulosTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(revertConnections[this._articulosTableAdapter]));
                     this._articulosTableAdapter.Transaction = null;
+                }
+                if ((this._tiposDeArticuloTableAdapter != null)) {
+                    this._tiposDeArticuloTableAdapter.Connection = ((global::System.Data.SqlClient.SqlConnection)(revertConnections[this._tiposDeArticuloTableAdapter]));
+                    this._tiposDeArticuloTableAdapter.Transaction = null;
                 }
                 if ((0 < adaptersWithAcceptChangesDuringUpdate.Count)) {
                     global::System.Data.Common.DataAdapter[] adapters = new System.Data.Common.DataAdapter[adaptersWithAcceptChangesDuringUpdate.Count];

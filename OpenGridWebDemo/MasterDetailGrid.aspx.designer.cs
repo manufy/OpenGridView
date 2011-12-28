@@ -11,16 +11,7 @@
 namespace OpenGridWebDemo {
     
     
-    public partial class OpenGridWebDemo {
-        
-        /// <summary>
-        /// Control Head.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder Head;
+    public partial class MasterDetailGrid {
         
         /// <summary>
         /// Control form1.
@@ -32,21 +23,30 @@ namespace OpenGridWebDemo {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// Control MainScriptManager.
+        /// Control OpenGridViewFacturas.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::AjaxControlToolkit.ToolkitScriptManager MainScriptManager;
+        protected global::OpenControls.OpenGridView OpenGridViewFacturas;
         
         /// <summary>
-        /// Control Main.
+        /// Control OpenGridView1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder Main;
+        protected global::OpenControls.OpenGridView OpenGridView1;
+        
+        /// <summary>
+        /// Control ObjectDataSourceFacturas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSourceFacturas;
     }
 }

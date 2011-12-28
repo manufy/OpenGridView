@@ -11,7 +11,7 @@
 namespace OpenGridWebDemo {
     
     
-    public partial class Articulos {
+    public partial class FacturasDetalle {
         
         /// <summary>
         /// Control ValidationSummaryInserciones.
@@ -41,31 +41,31 @@ namespace OpenGridWebDemo {
         protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummaryBorrados;
         
         /// <summary>
-        /// Control DeleteConflictMessage.
+        /// Control OpenGridViewFacturasDetalle.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label DeleteConflictMessage;
+        protected global::OpenControls.OpenGridView OpenGridViewFacturasDetalle;
         
         /// <summary>
-        /// Control UpdateConflictMessage.
+        /// Control ObjectDataSourceFacturasDetalle.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label UpdateConflictMessage;
+        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSourceFacturasDetalle;
         
         /// <summary>
-        /// Control OpenGridViewArticulos.
+        /// Control ObjectDataSourceFacturas.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::OpenControls.OpenGridView OpenGridViewArticulos;
+        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSourceFacturas;
         
         /// <summary>
         /// Control ObjectDataSourceArticulos.

@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 using OpenGridView;
 
-namespace OpenGridView
+namespace OpenControls
 {
      public  class ResourceFinder : OpenGridView
     {

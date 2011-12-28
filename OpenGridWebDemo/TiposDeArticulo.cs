@@ -4,16 +4,16 @@ using OpenGridWebDemo.DataSetTestTableAdapters;
 namespace OpenGridWebDemo
 {
     [DataObject]
-    public class ArticulosBll
+    public class TiposDeArticuloBll
     {
-        private ArticulosTableAdapter _tableAdapter;
+        private TiposDeArticuloTableAdapter _tableAdapter;
 
-        private ArticulosTableAdapter Adapter
+        private TiposDeArticuloTableAdapter Adapter
         {
             get
             {
                 return _tableAdapter ??
-                       (_tableAdapter = new ArticulosTableAdapter());
+                       (_tableAdapter = new TiposDeArticuloTableAdapter());
             }
         }
 
@@ -25,21 +25,21 @@ namespace OpenGridWebDemo
         // CONSULTAS
 
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public DataSetTest.ArticulosDataTable Get()
+        public DataSetTest.TiposDeArticuloDataTable Get()
         {
             return Adapter.GetData();
         }
 
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public DataSetTest.ArticulosDataTable GetDataByFacturaId(decimal articuloid)
+        public DataSetTest.TiposDeArticuloDataTable GetDataByTipoDeArticuloID(decimal articuloid)
         {
-            return Adapter.GetDataByArticuloID(articuloid);
+            return Adapter.GetDataByTipoArticuloID(articuloid);
         }
 
         // Paginacion en el servidor
 
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public DataSetTest.ArticulosDataTable Get(int? startRowIndex, int maximumRows)
+        public DataSetTest.TiposDeArticuloDataTable Get(int startRowIndex, int maximumRows)
         {
             return Adapter.GetDataPaged(startRowIndex, maximumRows);
         }
@@ -47,7 +47,7 @@ namespace OpenGridWebDemo
         // Paginacion y ordenación en el servidor
 
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public DataSetTest.ArticulosDataTable Get(string sortExpression, int? startRowIndex, int maximumRows)
+        public DataSetTest.TiposDeArticuloDataTable Get(string sortExpression, int startRowIndex, int maximumRows)
         {
             // Parsea y mapea sortExpression al campo ID del datatable del que se trate
 
@@ -57,7 +57,7 @@ namespace OpenGridWebDemo
             if (Tokens.Length > 1)
                 ordertype = Tokens[1];
             if ((sortExpression == "") || (sortExpression == "id") || (index == "id"))
-                sortExpression = "articuloid " + ordertype;
+                sortExpression = "tipoarticuloid " + ordertype;
 
             return Adapter.GetDataPagedSorted(startRowIndex, maximumRows, sortExpression);
         }
@@ -65,7 +65,7 @@ namespace OpenGridWebDemo
         [DataObjectMethod(DataObjectMethodType.Select, true)]
         public int GetRowCount()
         {
-            int? numero = Adapter.GetRowCount();
+            int numero = (int)Adapter.GetRowCount();
             int resultado = int.Parse(numero.ToString());
             return resultado;
         }
@@ -75,11 +75,11 @@ namespace OpenGridWebDemo
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
         public bool Insert(string descripcion)
         {
-            var dataset = new DataSetTest.ArticulosDataTable();
-            DataSetTest.ArticulosRow nuevoregistro =
-                dataset.NewArticulosRow();
+            var dataset = new DataSetTest.TiposDeArticuloDataTable();
+            DataSetTest.TiposDeArticuloRow nuevoregistro =
+                dataset.NewTiposDeArticuloRow();
             nuevoregistro.descripcion = descripcion;
-            dataset.AddArticulosRow(nuevoregistro);
+            dataset.AddTiposDeArticuloRow(nuevoregistro);
             int rows_affected = Adapter.Update(dataset);
             return rows_affected == 1;
         }
@@ -87,31 +87,27 @@ namespace OpenGridWebDemo
         // ACTUALIZACIONES
 
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-        public bool Update(decimal id, string descripcion, decimal tipoarticuloid, int campocalculadonovisible, decimal original_id, string original_descripcion, decimal original_tipoarticuloid, int original_campocalculadonovisible)
+        public bool Update(decimal id, string descripcion, decimal original_id ,string original_descripcion)
         {
-            DataSetTest.ArticulosDataTable registros =
-                Adapter.GetDataByArticuloID(original_id);
+            DataSetTest.TiposDeArticuloDataTable registros =
+                Adapter.GetDataByTipoArticuloID(original_id);
             if (registros.Count != 1)
                 // No se ha encontrado la etiqueta de composicion, devuelve falso
                 return false;
-            DataSetTest.ArticulosRow registro = registros[0];
+            DataSetTest.TiposDeArticuloRow registro = registros[0];
             registro.descripcion = original_descripcion;
-            registro.tipoarticuloid = original_tipoarticuloid;
-            registro.campocalculadonovisible = original_campocalculadonovisible;
-         //   registro.AcceptChanges();
+            registro.AcceptChanges();
             registro.descripcion = descripcion;
-            registro.tipoarticuloid = tipoarticuloid;
-            registro.campocalculadonovisible = campocalculadonovisible;
-            int rows_affected = Adapter.Update(registro);
+             int rows_affected = Adapter.Update(registro);
             return rows_affected == 1;
         }
 
         // BORRADOS
 
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
-        public bool Delete(decimal original_id, string original_descripcion,decimal original_tipoarticuloid, int original_campocalculadonovisible)
+        public bool Delete(decimal original_id, string original_descripcion)
         {
-            int rows_affected = Adapter.Delete(original_id, original_descripcion, original_tipoarticuloid, original_campocalculadonovisible);
+            int rows_affected = Adapter.Delete(original_id, original_descripcion);
             return rows_affected == 1;
         }
     }

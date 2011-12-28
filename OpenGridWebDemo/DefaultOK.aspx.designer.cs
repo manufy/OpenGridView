@@ -47,7 +47,7 @@ namespace OpenGridWebDemo {
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::OpenGridView.OpenGridView OpenGridViewFacturas;
+        protected global::OpenControls.OpenGridView OpenGridViewFacturas;
         
         /// <summary>
         /// Control ObjectDataSourceFacturas.
@@ -57,5 +57,14 @@ namespace OpenGridWebDemo {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSourceFacturas;
+        
+        /// <summary>
+        /// Control ObjectDataSourceDetalle.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSourceDetalle;
     }
 }

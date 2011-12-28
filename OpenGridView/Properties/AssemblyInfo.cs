@@ -46,3 +46,5 @@ using System.Runtime.InteropServices;
 
 [assembly: System.Web.UI.WebResource("OpenGridView.Images.ordenacionflechaabajo.gif", "img/gif")]
 [assembly: System.Web.UI.WebResource("OpenGridView.Images.ordenacionflechaarriba.gif", "img/gif")]
+
+[assembly: System.Web.UI.WebResource("OpenGridView.Images.lupa.gif", "img/gif")]
